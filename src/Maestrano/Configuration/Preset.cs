@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json.Linq;
-using System.Net.Http.Headers;
 
 namespace Maestrano.Configuration
 {
@@ -69,28 +68,21 @@ namespace Maestrano.Configuration
         /// <returns>true if the authentication is successful, false otherwise</returns>
         public bool Authenticate(System.Web.HttpRequest request)
         {
+            string authHeader = request.Headers["Authorization"];
             bool authenticated = false;
-            var authHeader = request.Headers["Authorization"];
-            if (authHeader != null)
+            // RFC 2617 sec 1.2, "scheme" name is case-insensitive
+            if (authHeader != null && authHeader.ToLower().StartsWith("basic"))
             {
-                var authHeaderVal = AuthenticationHeaderValue.Parse(authHeader);
+                string encodedUsernamePassword = authHeader.Substring("Basic ".Length).Trim();
+                Encoding encoding = Encoding.GetEncoding("iso-8859-1");
+                string usernamePassword = encoding.GetString(Convert.FromBase64String(encodedUsernamePassword));
 
-                // RFC 2617 sec 1.2, "scheme" name is case-insensitive
-                if (authHeaderVal.Scheme.Equals("basic",
-                        StringComparison.OrdinalIgnoreCase) &&
-                    authHeaderVal.Parameter != null)
-                {
-                    var credentials = authHeaderVal.Parameter;
-                    var encoding = Encoding.GetEncoding("iso-8859-1");
-                    credentials = encoding.GetString(Convert.FromBase64String(credentials));
+                int seperatorIndex = usernamePassword.IndexOf(':');
 
-                    int separator = credentials.IndexOf(':');
-                    string apiId = credentials.Substring(0, separator);
-                    string apiKey = credentials.Substring(separator + 1);
-                    authenticated = Authenticate(apiId,apiKey);
-                }
+                var apiId = usernamePassword.Substring(0, seperatorIndex);
+                var apiKey = usernamePassword.Substring(seperatorIndex + 1);
+                authenticated = Authenticate(apiId, apiKey);
             }
-
             return authenticated;
         }
 

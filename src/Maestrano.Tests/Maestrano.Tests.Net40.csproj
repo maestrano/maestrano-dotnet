@@ -59,11 +59,6 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account\BillTest.cs" />
-    <Compile Include="Account\GroupTest.cs" />
-    <Compile Include="Account\RecurringBillTest.cs" />
-    <Compile Include="Account\UserTest.cs" />
-    <Compile Include="Connec\ClientTest.cs" />
     <Compile Include="Helpers\TimeZoneConverterTests.cs" />
     <Compile Include="MaestranoConfigurationTests.cs" />
     <Compile Include="Properties\Assembly.cs" />
@@ -106,7 +101,9 @@
     <None Include="Support\Saml\Certificates\certificate1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Account\" />
     <Folder Include="Api\" />
+    <Folder Include="Connec\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

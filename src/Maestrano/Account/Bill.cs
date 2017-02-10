@@ -50,6 +50,9 @@ namespace Maestrano.Account
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("third_party")]
+        public bool ThirdParty { get; set; }
+
         /// <summary>
         /// The Resource name
         /// </summary>
@@ -88,7 +91,7 @@ namespace Maestrano.Account
             return (new BillRequestor()).Retrieve(billId);
         }
 
-        public static Bill Create(String groupId, Int32 priceCents, String description, String currency = "AUD", Decimal? units = null, DateTime? periodStartedAt = null, DateTime? periodEndedAt = null)
+        public static Bill Create(String groupId, Int32 priceCents, String description, String currency = "AUD", Decimal? units = null, DateTime? periodStartedAt = null, DateTime? periodEndedAt = null, bool thirdParty = false)
         {
             return (new BillRequestor()).Create(
                 groupId: groupId, 
@@ -97,7 +100,8 @@ namespace Maestrano.Account
                 currency: currency,
                 units: units,
                 periodStartedAt: periodStartedAt,
-                periodEndedAt: periodEndedAt
+                periodEndedAt: periodEndedAt,
+                thirdParty: thirdParty
             );
         }
 

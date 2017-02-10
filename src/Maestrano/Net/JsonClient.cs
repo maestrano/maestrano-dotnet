@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp.Authenticators;
 
 namespace Maestrano.Net
 {
@@ -21,7 +22,7 @@ namespace Maestrano.Net
             client.AddDefaultHeader("Accept", "application/vnd.api+json");
             client.AddDefaultHeader("Content-Type", "application/vnd.api+json");
             client.Authenticator = new HttpBasicAuthenticator(key, secret);
-            client.BaseUrl = String.Format("{0}{1}", host, path);
+            client.BaseUrl = new Uri(string.Format("{0}{1}", host, path));
 
         }
 
