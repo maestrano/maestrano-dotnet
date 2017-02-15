@@ -53,7 +53,7 @@ namespace Maestrano.Api
             var response = jsonClient.Execute(request);
             var respObj = DeserializeObject<SingleResult>(response.Content);
             ThrowIfErrors(respObj.Errors);
-            respObj.Data.Marketplace = preset.Marketplace;
+            respObj.Data.Preset = preset;
             return respObj.Data;
         }
         /// <summary>
@@ -86,7 +86,7 @@ namespace Maestrano.Api
             ThrowIfErrors(respObj.Errors);
             foreach (T item in respObj.Data)
             {
-                item.Marketplace = preset.Marketplace;
+                item.Preset = preset;
             }
             return respObj.Data;
         }

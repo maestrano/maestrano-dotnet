@@ -69,6 +69,21 @@ namespace Maestrano.Account
         public bool ThirdParty { get; set; }
 
         /// <summary>
+        /// Cancel the Bill
+        /// </summary>
+        /// <returns>if the recurring Bill was cancelled</returns>
+        public Boolean Cancel(String id)
+        {
+            if (Preset == null)
+            {
+                throw new Exception("Preset has not been set on the Bill. The Bill needs to be retrieved before: preset.Bill.Retrieve(id)");
+            }
+            var requestor = new BillRequestor(Preset);
+            return requestor.Cancel(Id);
+        }
+
+
+        /// <summary>
         /// The Resource name
         /// </summary>
         public static string IndexPath()
@@ -92,5 +107,6 @@ namespace Maestrano.Account
         {
             return new BillRequestor(preset);
         }
+
     }
 }

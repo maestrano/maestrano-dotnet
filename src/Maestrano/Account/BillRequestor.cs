@@ -37,5 +37,21 @@ namespace Maestrano.Account
                 att.Add("thirdParty", "true");
             return Create(att);
         }
+
+        /// <summary>
+        /// Cancel the recurring Bill
+        /// </summary>
+        /// <returns>if the recurring Bill was cancelled</returns>
+        public Boolean Cancel(String id)
+        {
+            if (id != null)
+            {
+                Bill respBill = Delete(id);
+                var Status = respBill.Status;
+                return (Status.Equals("cancelled"));
+            }
+            return false;
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Maestrano.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,9 @@ namespace Maestrano.Account
 {
     public class MnoObject
     {
-        public string Marketplace { get; set; }
+        public string Marketplace { get { return Preset.Marketplace; } }
+
+        public Preset Preset { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }

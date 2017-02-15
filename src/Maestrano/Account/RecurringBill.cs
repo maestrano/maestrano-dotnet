@@ -20,7 +20,7 @@ namespace Maestrano.Account
         public String Status { get; set; }
 
         /// <summary>
-        /// 
+        /// How many units are billed for the amount charged
         /// </summary>
         [JsonProperty("units")]
         public decimal? Units { get; set; }
@@ -79,6 +79,20 @@ namespace Maestrano.Account
         /// </summary>
         [JsonProperty("group_id")]
         public string GroupId { get; set; }
+
+        /// <summary>
+        /// Cancel the Recurring Bill
+        /// </summary>
+        /// <returns>if the recurring Bill was cancelled</returns>
+        public Boolean Cancel(String id)
+        {
+            if (Preset == null)
+            {
+                throw new Exception("Preset has not been set on the RecurringBill. The RecurringBill needs to be retrieved before: preset.RecurringBill.Retrieve(id)");
+            }
+            var requestor = new RecurringBillRequestor(Preset);
+            return requestor.Cancel(Id);
+        }
 
         /// <summary>
         /// The Resource name

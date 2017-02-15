@@ -70,6 +70,10 @@ The [developer platform](https://developer.maestrano.com) is the easiest way to 
 
 At your application startup, just call:
 ```csharp
+// Adding TSL12 Security Protocol to use for new connections that use the HTTPS scheme 
+// Maestrano does not support SSL3 protocol as it is insecure
+// https://blog.mozilla.org/security/2014/10/14/the-poodle-attack-and-the-end-of-ssl-3-0/
+ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 Maestrano.MnoHelper.AutoConfigure();
 ```
 In order to call `AutoConfigure()`, you will need to provide some information.
