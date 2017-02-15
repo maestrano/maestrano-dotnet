@@ -50,8 +50,9 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.2\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -60,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\TimeZoneConverterTests.cs" />
+    <Compile Include="IntegrationTest\MaestranoTest.cs" />
     <Compile Include="MaestranoConfigurationTests.cs" />
     <Compile Include="Properties\Assembly.cs" />
     <Compile Include="MaestranoMethodsTests.cs" />

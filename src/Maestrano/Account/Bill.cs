@@ -72,7 +72,7 @@ namespace Maestrano.Account
         /// Cancel the Bill
         /// </summary>
         /// <returns>if the recurring Bill was cancelled</returns>
-        public Boolean Cancel(String id)
+        public Boolean Cancel()
         {
             if (Preset == null)
             {
