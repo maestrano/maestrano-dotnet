@@ -12,50 +12,53 @@ namespace Maestrano.Net
 {
     public class JsonClient
     {
-        private readonly RestClient client;
+        /// <summary>
+        /// Internal configured RestClient
+        /// </summary>
+        public RestClient InternalClient{ get; private set; }
 
         public JsonClient(string host, string path, string key, string secret)
         {
 
-            client = new RestClient();
-            client.UserAgent = "maestrano-dotnet/" + VersionHelper.GetVersion();
-            client.AddDefaultHeader("Accept", "application/vnd.api+json");
-            client.AddDefaultHeader("Content-Type", "application/vnd.api+json");
-            client.Authenticator = new HttpBasicAuthenticator(key, secret);
-            client.BaseUrl = new Uri(string.Format("{0}{1}", host, path));
+            InternalClient = new RestClient();
+            InternalClient.UserAgent = "maestrano-dotnet/" + VersionHelper.GetVersion();
+            InternalClient.AddDefaultHeader("Accept", "application/vnd.api+json");
+            InternalClient.AddDefaultHeader("Content-Type", "application/vnd.api+json");
+            InternalClient.Authenticator = new HttpBasicAuthenticator(key, secret);
+            InternalClient.BaseUrl = new Uri(string.Format("{0}{1}", host, path));
         }
 
-        public RestResponse Execute(IRestRequest request)
+        public RestResponse Execute(RestRequest request)
         {
-            return (RestResponse)client.Execute(request);
+            return (RestResponse)InternalClient.Execute(request);
         }
 
-        public RestResponse<T> Execute<T>(IRestRequest request) where T : new()
+        public RestResponse<T> Execute<T>(RestRequest request) where T : new()
         {
-            return (RestResponse <T>)client.Execute<T>(request);
+            return (RestResponse <T>)InternalClient.Execute<T>(request);
         }
 
         public RestResponse Get(string path)
         {
-            return Execute(PrepareRequest(Method.GET, path, null, null));
+            return Execute(PrepareRequest(Method.GET, path));
         }
 
         public RestResponse Get(string path, NameValueCollection parameters)
         {
-            return Execute(PrepareRequest(Method.GET, path, parameters, null));
+            return Execute(PrepareRequest(Method.GET, path, parameters));
         }
 
         public RestResponse<T> Get<T>(string path) where T : new()
         {
-            return Execute<T>(PrepareRequest(Method.GET, path, null, null));
+            return Execute<T>(PrepareRequest(Method.GET, path));
         }
 
         public RestResponse<T> Get<T>(string path, NameValueCollection parameters) where T : new()
         {
-            return Execute<T>(PrepareRequest(Method.GET, path, parameters, null));
+            return Execute<T>(PrepareRequest(Method.GET, path, parameters));
         }
 
-        public IRestResponse Post(string path, string jsonBody)
+        public RestResponse Post(string path, string jsonBody)
         {
             return Execute(PrepareRequest(Method.POST, path, null, jsonBody));
         }
@@ -65,7 +68,7 @@ namespace Maestrano.Net
             return Execute<T>(PrepareRequest(Method.POST, path, null, jsonBody));
         }
 
-        public IRestResponse Put(string path, string jsonBody)
+        public RestResponse Put(string path, string jsonBody)
         {
             return Execute(PrepareRequest(Method.PUT, path, null, jsonBody));
         }
@@ -75,7 +78,11 @@ namespace Maestrano.Net
             return Execute<T>(PrepareRequest(Method.PUT, path, null, jsonBody));
         }
 
-        private IRestRequest PrepareRequest(Method method, String path, NameValueCollection parameters, String body)
+        /// <summary>
+        /// Prepare a Request for a given path, parameters and body.
+        /// Parameters keys will be converted to snake case.
+        /// </summary>
+        public RestRequest PrepareRequest(Method method, String path, NameValueCollection parameters = null, String body = null)
         {
             var request = new RestRequest();
             request.Resource = path;
