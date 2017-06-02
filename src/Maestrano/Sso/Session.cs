@@ -174,10 +174,6 @@ namespace Maestrano.Sso
         /// <returns></returns>
         public Boolean IsValid(RestClient client, Boolean ifSession = false)
         {
-            // Return true automatically if SLO is disabled
-            if (!ssoConfiguration.SloEnabled)
-                return true;
-
             // Return true if maestrano session not set
             // and ifSession option enabled
             if (ifSession && (HttpSession == null || HttpSession[ssoConfiguration.Marketplace] == null))

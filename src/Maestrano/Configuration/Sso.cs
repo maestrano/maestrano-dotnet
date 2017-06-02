@@ -27,12 +27,18 @@ namespace Maestrano.Configuration
         /// Load configuration into a Sso configuration object from a JObject 
         /// </summary>
         /// <returns>A Sso configuration object</returns>
-        public static Sso LoadFromJson(String marketplace, Api apiConfiguration, JObject obj)
+        public static Sso LoadFromJson(String marketplace, App appConfiguration, Api apiConfiguration, JObject obj)
         {
             var config = new Sso(marketplace, apiConfiguration);
             config.InitPath = obj["init_path"].Value<String>();
             config.ConsumePath = obj["consume_path"].Value<String>();
-            config.Idm = obj["idm"].Value<String>();
+            var idm = obj["idm"].Value<String>();
+            // if idm is null, we take the host by default
+            if (String.IsNullOrEmpty(idm))
+            {
+                idm = appConfiguration.Host;
+            }
+            config.Idm = idm;
             config.Idp = obj["idp"].Value<String>();
             config.X509Fingerprint = obj["x509_fingerprint"].Value<String>();
             config.X509Certificate = obj["x509_certificate"].Value<String>();
@@ -44,15 +50,6 @@ namespace Maestrano.Configuration
         /// </summary>
         public String Marketplace { get; set; }
 
-        /// <summary>
-        /// Is Single Sign-On enabled - useful for debugging
-        /// </summary>
-        public bool Enabled { get; set; }
-
-        /// <summary>
-        /// Is Single Logout enabled - useful for debugging
-        /// </summary>
-        public bool SloEnabled { get; set; }
 
         /// <summary>
         /// Path to init action
@@ -241,5 +238,19 @@ namespace Maestrano.Configuration
         {
             httpSessionObj.Remove(Marketplace);
         }
+
+
+        /// <summary>
+        /// Is Single Sign-On enabled - useful for debugging
+        /// </summary>
+        [Obsolete("Enabled is deprecated, this will always return true")]
+        public bool Enabled { get { return true; } set { } }
+
+        /// <summary>
+        /// Is Single Logout enabled - useful for debugging
+        /// </summary>
+        [Obsolete("SloEnabled is deprecated, this will always return true")]
+        public bool SloEnabled { get { return true; } set {} }
+
     }
 }

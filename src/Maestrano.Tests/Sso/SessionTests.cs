@@ -27,7 +27,6 @@ namespace Maestrano.Tests.Sso
         {
             Helpers.destroyMnoSession();
             preset = new Preset("test");
-            preset.Sso.SloEnabled = true;
         }
 
 
@@ -181,33 +180,7 @@ namespace Maestrano.Tests.Sso
             Assert.AreEqual(mnoSession.Recheck, mnoObj.Value<DateTime>("session_recheck"));
         }
 
-        [Test]
-        public void IsValid_WhenSloDisabled_ItShouldReturnTrue()
-        {
-            // Disable SLO
-            preset.Sso.SloEnabled = false;
-            preset.Sso.Idp = "http://some-url.com";
-            // Response preparation (session not valid)
-            RestResponse response = new RestResponse();
-            var datetime = DateTime.UtcNow;
-            JObject respObj = new JObject(new JProperty("valid", "false"), new JProperty("recheck", datetime.ToString("s")));
-            response.Content = respObj.ToString();
-            response.ResponseStatus = ResponseStatus.Completed;
-
-            // Client mock
-            var mockRestClient = new Mock<RestClient>();
-            mockRestClient.Setup(c => c.Execute(It.IsAny<RestRequest>())).Returns(response);
-
-            // Http context
-            var recheck = DateTime.UtcNow.AddMinutes(-1);
-            Helpers.injectMnoSession(recheck);
-            var httpSession = Helpers.FakeHttpSessionState(preset);
-
-            // test
-            Session mnoSession = new Session(preset.Sso, httpSession);
-            Assert.IsTrue(mnoSession.IsValid());
-        }
-
+       
         [Test]
         public void IsValid_WhenIfSessionSpecifiedAndNoMnoSession_ItShouldReturnTrue()
         {

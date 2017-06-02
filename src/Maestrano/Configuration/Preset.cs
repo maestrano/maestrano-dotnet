@@ -44,7 +44,7 @@ namespace Maestrano.Configuration
             Api = Api.LoadFromJson(obj["api"].Value<JObject>());
             Connec = Connec.LoadFromJson(obj["connec"].Value<JObject>());
             Webhook = Webhook.LoadFromJson(obj["webhooks"].Value<JObject>());
-            Sso = Sso.LoadFromJson(Marketplace, Api, obj["sso"].Value<JObject>());
+            Sso = Sso.LoadFromJson(Marketplace, App, Api, obj["sso"].Value<JObject>());
         }
 
         /// <summary>
@@ -116,7 +116,6 @@ namespace Maestrano.Configuration
                     new JProperty("version", Api.Version),
                     new JProperty("lang_version", Api.LangVersion))),
                 new JProperty("sso", new JObject(
-                    new JProperty("enabled", Sso.Enabled),
                     new JProperty("init_path", Sso.InitPath),
                     new JProperty("consume_path", Sso.ConsumePath),
                     new JProperty("idm", Sso.Idm),
@@ -126,38 +125,13 @@ namespace Maestrano.Configuration
                     new JProperty("x509_certificate", Sso.X509Certificate))),
                 new JProperty("webhook", new JObject(
                     new JProperty("account", new JObject(
-                        new JProperty("groups_path", Webhook.Account.GroupsPath),
-                        new JProperty("group_users_path", Webhook.Account.GroupUsersPath)
+                        new JProperty("group_path", Webhook.Account.GroupPath),
+                        new JProperty("group_user_path", Webhook.Account.GroupUserPath)
                         )),
                     new JProperty("connec", new JObject(
-                        new JProperty("notifications_path", Webhook.Connec.NotificationsPath),
-                        new JProperty("subscriptions", new JObject(
-                                new JProperty("accounts", Webhook.Connec.Subscriptions.Accounts),
-                                new JProperty("company", Webhook.Connec.Subscriptions.Company),
-                                new JProperty("invoices", Webhook.Connec.Subscriptions.Invoices),
-                                new JProperty("sales_orders", Webhook.Connec.Subscriptions.SalesOrders),
-                                new JProperty("purchase_orders", Webhook.Connec.Subscriptions.PurchaseOrders),
-                                new JProperty("quotes", Webhook.Connec.Subscriptions.Quotes),
-                                new JProperty("payments", Webhook.Connec.Subscriptions.Payments),
-                                new JProperty("journals", Webhook.Connec.Subscriptions.Journals),
-                                new JProperty("items", Webhook.Connec.Subscriptions.Items),
-                                new JProperty("organizations", Webhook.Connec.Subscriptions.Organizations),
-                                new JProperty("people", Webhook.Connec.Subscriptions.People),
-                                new JProperty("projects", Webhook.Connec.Subscriptions.Projects),
-                                new JProperty("tax_codes", Webhook.Connec.Subscriptions.TaxCodes),
-                                new JProperty("tax_rates", Webhook.Connec.Subscriptions.TaxRates),
-                                new JProperty("events", Webhook.Connec.Subscriptions.Events),
-                                new JProperty("venues", Webhook.Connec.Subscriptions.Venues),
-                                new JProperty("event_orders", Webhook.Connec.Subscriptions.EventOrders),
-                                new JProperty("work_locations", Webhook.Connec.Subscriptions.WorkLocations),
-                                new JProperty("pay_items", Webhook.Connec.Subscriptions.PayItems),
-                                new JProperty("employees", Webhook.Connec.Subscriptions.Employees),
-                                new JProperty("pay_schedules", Webhook.Connec.Subscriptions.PaySchedules),
-                                new JProperty("time_sheets", Webhook.Connec.Subscriptions.TimeSheets),
-                                new JProperty("time_activities", Webhook.Connec.Subscriptions.TimeActivities),
-                                new JProperty("pay_runs", Webhook.Connec.Subscriptions.PayRuns),
-                                new JProperty("pay_stubs", Webhook.Connec.Subscriptions.PayStubs)
-                            ))
+                        new JProperty("notification_path", Webhook.Connec.NotificationPath),
+                        new JProperty("external_ids", Webhook.Connec.ExternalIds),
+                        new JProperty("initialization_path", Webhook.Connec.InitializationPath)
                         ))))
             );
 
