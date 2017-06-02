@@ -154,7 +154,17 @@ namespace Maestrano.Tests
             // Test
             preset.Sso.ClearSession(session);
             Assert.IsNull(session[preset.Marketplace]);
-
         }
+
+        [Test]
+        public void RegisterMarketplace_ItRegisterFromFile()
+        {
+            var byteArray = Properties.Resources.developerPlatformAnswer;
+            var content = System.Text.Encoding.UTF8.GetString(byteArray);
+
+            var preset = MnoHelper.RegisterMarketplaceFromJson(content);
+            Assert.AreEqual("http://localhost:63705", preset.App.Host);
+        }
+
     }
 }

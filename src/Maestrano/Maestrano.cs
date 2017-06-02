@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using Maestrano.Configuration;
 using Maestrano.Net;
 using RestSharp;
+using System.IO;
 
 namespace Maestrano
 {
@@ -115,9 +116,47 @@ namespace Maestrano
             var marketplaces = content["marketplaces"].Value<JArray>();
             foreach (var marketplace in marketplaces)
             {
-                var preset = new Preset(marketplace.Value<JObject>());
-                presetDict[preset.Marketplace] =  preset;
+                RegisterMarketplace(marketplace.Value<JObject>());
             }
+        }
+        /// <summary>
+        /// Register a marketplace directly, without the developer platform
+        /// </summary>
+        /// <param name="jsonFilePath"> path of the file containing the json description of the marketplace</param>
+        public static Preset RegisterMarketplaceFromFile(String jsonFilePath)
+        {
+            String json = File.ReadAllText(jsonFilePath);
+            var jsonParsed = JObject.Parse(json);
+            return RegisterMarketplace(jsonParsed);
+        }
+
+        /// <summary>
+        /// Register a marketplace directly, without the developer platform
+        /// </summary>
+        /// <param name="json"> json description of the marketplace</param>
+        public static Preset RegisterMarketplaceFromJson(String json)
+        {
+            var jsonParsed = JObject.Parse(json);
+            return RegisterMarketplace(jsonParsed);
+        }
+
+        /// <summary>
+        /// Register a marketplace directly, without the developer platform
+        /// </summary>
+        /// <param name="json"> json description of the marketplace</param>
+        public static Preset RegisterMarketplace(JObject json)
+        {
+            return RegisterMarketplace(new Preset(json));
+        }
+
+        /// <summary>
+        /// Register a marketplace directly, without the developer platform
+        /// </summary>
+        /// <param name="preset"> preset of the marketplace</param>
+        public static Preset RegisterMarketplace(Preset preset)
+        {
+            presetDict[preset.Marketplace] = preset;
+            return preset;
         }
 
         /// <summary>
